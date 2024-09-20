@@ -1,0 +1,40 @@
+[tool.poetry]
+name = "polars-gpu-test"
+version = "0.1.0"
+description = ""
+authors = ["Vikramaditya Tatke <vikramadityatatke@proton.me>"]
+readme = "README.md"
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.11"
+pymongo = "^4.9.1"
+jupyter = "^1.1.1"
+hvplot = "^0.10.0"
+pynvml = "^11.5.3"
+bokeh = "^3.5.2"
+holoviews = "^1.19.1"
+pandas = "^2.2.2"
+pyarrow = "16.1.0"
+ipython-autotime = "^0.3.2"
+duckdb = "^1.1.0"
+asyncio = "^3.4.3"
+aiohttp = "^3.10.5"
+tqdm = "^4.66.5"
+glances = {extras = ["gpu"], version = "^4.1.2"}
+fastapi = "^0.115.0"
+uvicorn = "^0.30.6"
+polars = {version = "1.5.0", extras = ["gpu"]}
+
+[[tool.poetry.source]]
+name = "polars[gpu]"
+url = "https://pypi.nvidia.com/cudf-cu12/"
+priority = "supplemental"
+
+
+[tool.poetry.group.dev.dependencies]
+ipykernel = "^6.29.5"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
