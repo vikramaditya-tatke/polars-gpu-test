@@ -3,3 +3,7 @@
 /.tmp
 /.venv
 /duckdb.db*
+/dataset/
+/results/
+__pycache__/
+.pytest_cache/

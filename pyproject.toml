@@ -4,36 +4,46 @@ version = "0.1.0"
 description = ""
 authors = ["Vikramaditya Tatke <vikramadityatatke@proton.me>"]
 readme = "README.md"
-package-mode = false
+packages = [{include = "pipeline.py"}, {include = "download_dataset.py"}]
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = ">=3.11,<3.13"
 pymongo = "^4.9.1"
 jupyter = "^1.1.1"
 hvplot = "^0.10.0"
 pynvml = "^11.5.3"
 bokeh = "^3.5.2"
 holoviews = "^1.19.1"
-pandas = "^2.2.2"
+pandas = "2.2.2"
+numpy = "<2"
 pyarrow = "16.1.0"
 ipython-autotime = "^0.3.2"
 duckdb = "^1.1.0"
-asyncio = "^3.4.3"
 aiohttp = "^3.10.5"
 tqdm = "^4.66.5"
 glances = {extras = ["gpu"], version = "^4.1.2"}
 fastapi = "^0.115.0"
 uvicorn = "^0.30.6"
-polars = {version = "1.5.0", extras = ["gpu"]}
+polars = "1.8.2"
+cudf-polars-cu12 = {version = "24.10.1", optional = true}
+chdb = "^3.7.2"
+altair = ">=5,<7"
+psutil = ">=5.9,<8"
+
+[tool.poetry.extras]
+gpu = ["cudf-polars-cu12"]
 
 [[tool.poetry.source]]
-name = "polars[gpu]"
-url = "https://pypi.nvidia.com/cudf-cu12/"
+name = "nvidia"
+url = "https://pypi.nvidia.com"
 priority = "supplemental"
 
 
 [tool.poetry.group.dev.dependencies]
 ipykernel = "^6.29.5"
+pytest = ">=8,<10"
+nbclient = ">=0.10,<0.12"
+nbformat = "^5.10"
 
 [build-system]
 requires = ["poetry-core"]

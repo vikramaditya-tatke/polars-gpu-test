@@ -1,68 +1,74 @@
-import aiohttp
+"""Download the public PyPI Parquet shards, failing on incomplete downloads."""
+
+import argparse
 import asyncio
-import os
-from tqdm import tqdm
+from pathlib import Path
+import tempfile
 import time
 
-
-async def download_parquet(session, url, filename, pbar):
-    if filename is None:
-        filename = url.split('/')[-1]
-
-    save_path = os.path.join(os.getcwd(), filename)
-
-    try:
-        async with session.get(url) as response:
-            total_size = int(response.headers.get('content-length', 0))
-            with open(save_path, 'wb') as file:
-                downloaded = 0
-                async for chunk in response.content.iter_chunked(8192):
-                    file.write(chunk)
-                    downloaded += len(chunk)
-                    pbar.update(len(chunk))
-        print(f"\nFile downloaded and saved as /dataset/{save_path}")
-    except Exception as e:
-        print(f"An unexpected error occurred while downloading {filename}: {e}")
+import aiohttp
+from tqdm import tqdm
 
 
-async def main(urls):
-    start_time = time.time()
-    async with aiohttp.ClientSession() as session:
-        total_size = 0
-        for url in urls:
-            async with session.head(url) as response:
-                total_size += int(response.headers.get('content-length', 0))
-
-        with tqdm(total=total_size, unit='B', unit_scale=True, desc="Total Progress") as pbar:
-            tasks = [download_parquet(session, url, None, pbar) for url in urls]
-            await asyncio.gather(*tasks)
-    end_time = time.time()
-    total_time = end_time - start_time
-    print(f"\nTotal download time: {total_time:.2f} seconds")
-
-
-# Example usage
 urls = [
-    "https://datasets-documentation.s3.eu-west-3.amazonaws.com/pypi/2023/pypi_0_7_20.snappy.parquet",
-    "https://datasets-documentation.s3.eu-west-3.amazonaws.com/pypi/2023/pypi_0_7_21.snappy.parquet",
-    "https://datasets-documentation.s3.eu-west-3.amazonaws.com/pypi/2023/pypi_0_7_22.snappy.parquet",
-    "https://datasets-documentation.s3.eu-west-3.amazonaws.com/pypi/2023/pypi_0_7_23.snappy.parquet",
-    "https://datasets-documentation.s3.eu-west-3.amazonaws.com/pypi/2023/pypi_0_7_24.snappy.parquet",
-    "https://datasets-documentation.s3.eu-west-3.amazonaws.com/pypi/2023/pypi_0_7_25.snappy.parquet",
-    "https://datasets-documentation.s3.eu-west-3.amazonaws.com/pypi/2023/pypi_0_7_26.snappy.parquet",
-    "https://datasets-documentation.s3.eu-west-3.amazonaws.com/pypi/2023/pypi_0_7_27.snappy.parquet",
-    "https://datasets-documentation.s3.eu-west-3.amazonaws.com/pypi/2023/pypi_0_7_28.snappy.parquet",
-    "https://datasets-documentation.s3.eu-west-3.amazonaws.com/pypi/2023/pypi_0_7_29.snappy.parquet",
-    "https://datasets-documentation.s3.eu-west-3.amazonaws.com/pypi/2023/pypi_0_7_30.snappy.parquet",
-    "https://datasets-documentation.s3.eu-west-3.amazonaws.com/pypi/2023/pypi_0_7_31.snappy.parquet",
-    "https://datasets-documentation.s3.eu-west-3.amazonaws.com/pypi/2023/pypi_0_7_32.snappy.parquet",
-    "https://datasets-documentation.s3.eu-west-3.amazonaws.com/pypi/2023/pypi_0_7_33.snappy.parquet",
-    "https://datasets-documentation.s3.eu-west-3.amazonaws.com/pypi/2023/pypi_0_7_34.snappy.parquet",
-    "https://datasets-documentation.s3.eu-west-3.amazonaws.com/pypi/2023/pypi_0_7_35.snappy.parquet",
-    "https://datasets-documentation.s3.eu-west-3.amazonaws.com/pypi/2023/pypi_0_7_36.snappy.parquet",
-    "https://datasets-documentation.s3.eu-west-3.amazonaws.com/pypi/2023/pypi_0_7_37.snappy.parquet",
-    "https://datasets-documentation.s3.eu-west-3.amazonaws.com/pypi/2023/pypi_0_7_38.snappy.parquet",
+    f"https://datasets-documentation.s3.eu-west-3.amazonaws.com/pypi/2023/"
+    f"pypi_0_7_{day}.snappy.parquet"
+    for day in range(20, 39)
 ]
 
+
+async def download_parquet(session, url, filename=None, pbar=None, output_dir="."):
+    if filename is None:
+        filename = url.split('/')[-1]
+    destination = Path(output_dir) / filename
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    temporary = None
+    try:
+        async with session.get(url) as response:
+            response.raise_for_status()
+            with tempfile.NamedTemporaryFile(
+                dir=destination.parent, prefix=f".{destination.name}.", suffix=".part", delete=False
+            ) as file:
+                temporary = Path(file.name)
+                async for chunk in response.content.iter_chunked(1024 * 1024):
+                    file.write(chunk)
+                    if pbar is not None:
+                        pbar.update(len(chunk))
+            temporary.replace(destination)
+            return destination
+    finally:
+        if temporary is not None:
+            temporary.unlink(missing_ok=True)
+
+
+async def main(urls, output_dir=".", concurrency=4):
+    start = time.perf_counter()
+    semaphore = asyncio.Semaphore(concurrency)
+    timeout = aiohttp.ClientTimeout(total=1800, sock_connect=30, sock_read=120)
+    async with aiohttp.ClientSession(timeout=timeout) as session:
+        # GET is sufficient; servers need not implement HEAD or Content-Length.
+        with tqdm(unit="B", unit_scale=True, desc="Downloaded") as pbar:
+            async def download(url):
+                async with semaphore:
+                    return await download_parquet(session, url, pbar=pbar, output_dir=output_dir)
+
+            async with asyncio.TaskGroup() as group:
+                tasks = [group.create_task(download(url)) for url in urls]
+    paths = [task.result() for task in tasks]
+    print(f"Downloaded {len(paths)} file(s) to {Path(output_dir).resolve()} "
+          f"in {time.perf_counter() - start:.2f}s")
+    return paths
+
+
 if __name__ == "__main__":
-    asyncio.run(main(urls))
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--output-dir", default=".")
+    parser.add_argument("--limit", type=int, default=len(urls), help="Number of default shards")
+    parser.add_argument("--url", action="append", help="Custom URL; repeat for multiple shards")
+    parser.add_argument("--concurrency", type=int, default=4)
+    args = parser.parse_args()
+    if not 1 <= args.limit <= len(urls):
+        parser.error(f"--limit must be between 1 and {len(urls)}")
+    if args.concurrency < 1:
+        parser.error("--concurrency must be positive")
+    asyncio.run(main(args.url or urls[:args.limit], args.output_dir, args.concurrency))
