@@ -1,0 +1,452 @@
+{
+  "code_sha256": {
+    "benchmarks/__init__.py": "c0c97cc9b6a716136551086c6eb92765eb9f4d73e090360d742459058cd606fe",
+    "benchmarks/__main__.py": "f44e277e5e652ea34de50940a7372178362dfe25a7a31ee9ead701d534e048ae",
+    "benchmarks/adapters.py": "dfd97e9206b2fe173cce73a681a3cca915e75e88597fd921e089cd3d3e74e9f7",
+    "benchmarks/reference.py": "1b0537ca00d0e9ed43c0cd4789fbca86458011122a83d2bca467d6a68651f58a",
+    "benchmarks/report.py": "ccb9b17baccfe2b43ddbac1ad3ad4d82fd92051441554bec70c42e66519b7f90",
+    "benchmarks/runner.py": "8cdcf15d5f8e12a9e3321880323a7ab60b4b06038c4d8ceb87f17c894d9332ab",
+    "benchmarks/spec.py": "f4220110100d57a9e6a5e4f2c662526a41bb2d57dacefa6aad8cebb50baf4afd",
+    "benchmarks/worker.py": "650f1a1d134c464808a4c34a2974621efbeb4504886ac6f927577f967e4dd31e"
+  },
+  "completed_at": "2026-10-25T05:41:35.703139+00:00",
+  "created_at": "2026-10-25T05:18:51.594124+00:00",
+  "definitions": {
+    "dimension": "Distinct non-null PROJECT; SHA256(UTF8(PROJECT))[0] % 16",
+    "engines": {
+      "chdb-mergetree": {
+        "environment": "modern",
+        "family": "chdb",
+        "mode": "default",
+        "storage": "persistent",
+        "version": "3.7.2"
+      },
+      "chdb-parquet": {
+        "environment": "modern",
+        "family": "chdb",
+        "mode": "default",
+        "storage": "parquet",
+        "version": "3.7.2"
+      },
+      "duckdb-1.5-parquet": {
+        "environment": "legacy",
+        "family": "duckdb",
+        "mode": "default",
+        "storage": "parquet",
+        "version": "1.5.6"
+      },
+      "duckdb-1.5-persistent": {
+        "environment": "legacy",
+        "family": "duckdb",
+        "mode": "default",
+        "storage": "persistent",
+        "version": "1.5.6"
+      },
+      "duckdb-2.0-parquet": {
+        "environment": "modern",
+        "family": "duckdb",
+        "mode": "default",
+        "storage": "parquet",
+        "version": "2.0.0"
+      },
+      "duckdb-2.0-persistent": {
+        "environment": "modern",
+        "family": "duckdb",
+        "mode": "default",
+        "storage": "persistent",
+        "version": "2.0.0"
+      },
+      "pandas": {
+        "environment": "modern",
+        "family": "pandas",
+        "mode": "default",
+        "storage": "parquet",
+        "version": "2.2.2"
+      },
+      "polars-1.8-default": {
+        "environment": "legacy",
+        "family": "polars",
+        "mode": "default",
+        "storage": "parquet",
+        "version": "1.8.2"
+      },
+      "polars-2.0-default": {
+        "environment": "modern",
+        "family": "polars",
+        "mode": "default",
+        "storage": "parquet",
+        "version": "2.0.0"
+      },
+      "polars-2.0-in-memory": {
+        "environment": "modern",
+        "family": "polars",
+        "mode": "in-memory",
+        "storage": "parquet",
+        "version": "2.0.0"
+      }
+    },
+    "sort": "DOWNLOADS DESC, grouping keys ASC NULLS LAST",
+    "workloads": {
+      "high-cardinality": {
+        "columns": [
+          "COUNTRY_CODE",
+          "URL"
+        ],
+        "description": "Count events by country and URL",
+        "keys": [
+          "COUNTRY_CODE",
+          "URL"
+        ]
+      },
+      "join": {
+        "columns": [
+          "COUNTRY_CODE",
+          "PROJECT"
+        ],
+        "description": "Inner join unique project dimension; count by country and bucket",
+        "keys": [
+          "COUNTRY_CODE",
+          "PROJECT_BUCKET"
+        ]
+      },
+      "original": {
+        "columns": [
+          "COUNTRY_CODE",
+          "PROJECT"
+        ],
+        "description": "Count events by country and project",
+        "keys": [
+          "COUNTRY_CODE",
+          "PROJECT"
+        ]
+      },
+      "selective": {
+        "columns": [
+          "COUNTRY_CODE",
+          "PROJECT"
+        ],
+        "description": "Filter country = GB; count events by project",
+        "keys": [
+          "PROJECT"
+        ]
+      }
+    }
+  },
+  "engines": [
+    "polars-1.8-default",
+    "polars-2.0-default",
+    "polars-2.0-in-memory",
+    "duckdb-1.5-parquet",
+    "duckdb-1.5-persistent",
+    "duckdb-2.0-parquet",
+    "duckdb-2.0-persistent",
+    "chdb-parquet",
+    "chdb-mergetree",
+    "pandas"
+  ],
+  "environments": {
+    "legacy": {
+      "dependencies": {
+        "chdb": "3.7.2",
+        "duckdb": "1.5.6",
+        "numpy": "1.26.4",
+        "pandas": "2.2.2",
+        "polars": "1.8.2",
+        "psutil": "7.2.2",
+        "pyarrow": "16.1.0",
+        "python-dateutil": "3.0.0",
+        "pytz": "2026.5",
+        "six": "1.17.0",
+        "tzdata": "2026.5"
+      },
+      "executable": "/home/vikramaditya/PersonalProjects/polars-gpu-test/.venv-bench-legacy/bin/python",
+      "python": "3.12.12"
+    },
+    "modern": {
+      "dependencies": {
+        "chdb": "3.7.2",
+        "duckdb": "2.0.0",
+        "numpy": "1.26.4",
+        "pandas": "2.2.2",
+        "polars": "2.0.0",
+        "polars-runtime-32": "2.0.0",
+        "psutil": "7.2.2",
+        "pyarrow": "16.1.0",
+        "python-dateutil": "3.0.0",
+        "pytz": "2026.5",
+        "six": "1.17.0",
+        "tzdata": "2026.5"
+      },
+      "executable": "/home/vikramaditya/PersonalProjects/polars-gpu-test/.venv-bench-modern/bin/python",
+      "python": "3.12.12"
+    }
+  },
+  "git_dirty": false,
+  "git_revision": "18460f74d5a15db3081e6ce6b84ad57a2ae55c22",
+  "gpu": {
+    "reason": "No supported-hardware strict GPU run is part of this CPU comparison",
+    "status": "pending",
+    "verified": false
+  },
+  "hardware": {
+    "available_affinity": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11
+    ],
+    "cpu": "Intel(R) Core(TM) i7-8750H CPU @ 2.20GHz",
+    "disk_free_bytes": 19958689792,
+    "distribution": {
+      "BUG_REPORT_URL": "https://bugs.launchpad.net/ubuntu/",
+      "DOCUMENTATION_URL": "https://docs.ubuntu.com",
+      "HOME_URL": "https://www.ubuntu.com/",
+      "ID": "ubuntu",
+      "ID_LIKE": "debian",
+      "LOGO": "ubuntu-logo",
+      "NAME": "Ubuntu",
+      "PRETTY_NAME": "Ubuntu 26.10",
+      "PRIVACY_POLICY_URL": "https://www.ubuntu.com/legal/terms-and-policies/privacy-policy",
+      "RELEASE_TYPE": "stable",
+      "SUPPORT_URL": "https://help.ubuntu.com/",
+      "UBUNTU_CODENAME": "stonking",
+      "VENDOR_NAME": "Canonical",
+      "VENDOR_URL": "https://canonical.com/",
+      "VERSION": "26.10 (Stonking Stingray)",
+      "VERSION_CODENAME": "stonking",
+      "VERSION_ID": "26.10"
+    },
+    "gpu_inventory": "[Errno 2] No such file or directory: 'nvidia-smi'",
+    "load_average": [
+      2.04052734375,
+      1.47705078125,
+      1.11083984375
+    ],
+    "logical_cpus": 12,
+    "memory": {
+      "active": 10376015872,
+      "available": 19178479616,
+      "buffers": 65880064,
+      "cached": 12627394560,
+      "free": 10967515136,
+      "inactive": 8268836864,
+      "percent": 41.5,
+      "shared": 3676250112,
+      "slab": 962863104,
+      "total": 32755855360,
+      "used": 13577375744
+    },
+    "physical_cores": 6,
+    "platform": "Linux-7.3.0-9-generic-x86_64-with-glibc2.44"
+  },
+  "input_rows": 30385077,
+  "inputs": [
+    {
+      "bytes": 149419259,
+      "path": "/home/vikramaditya/PersonalProjects/polars-gpu-test/dataset/pypi_0_7_20.snappy.parquet",
+      "rows": 1732608,
+      "schema": "TIMESTAMP: timestamp[ms, tz=UTC]\nCOUNTRY_CODE: string\nURL: string\nPROJECT: string\nFILE: string\nINSTALLER: string\nPYTHON: string\nIMPLEMENTATION: string\nDISTRO: string\nSYSTEM: string\nCPU: string\nOPENSSL_VERSION: string\nSETUPTOOLS_VERSION: string\nRUSTC_VERSION: string\nTLS_PROTOCOL: string\nTLS_CIPHER: string",
+      "sha256": "9c85c2e82b767088cb250bfb825e7e3099d5f6ab6259bc4bab45f811de24d14e"
+    },
+    {
+      "bytes": 145774227,
+      "path": "/home/vikramaditya/PersonalProjects/polars-gpu-test/dataset/pypi_0_7_21.snappy.parquet",
+      "rows": 1669634,
+      "schema": "TIMESTAMP: timestamp[ms, tz=UTC]\nCOUNTRY_CODE: string\nURL: string\nPROJECT: string\nFILE: string\nINSTALLER: string\nPYTHON: string\nIMPLEMENTATION: string\nDISTRO: string\nSYSTEM: string\nCPU: string\nOPENSSL_VERSION: string\nSETUPTOOLS_VERSION: string\nRUSTC_VERSION: string\nTLS_PROTOCOL: string\nTLS_CIPHER: string",
+      "sha256": "d2c2a0c3bdc83c5a3829599a7f096105184b6c87c165221ffd8b3434cd385eff"
+    },
+    {
+      "bytes": 148172862,
+      "path": "/home/vikramaditya/PersonalProjects/polars-gpu-test/dataset/pypi_0_7_22.snappy.parquet",
+      "rows": 1716309,
+      "schema": "TIMESTAMP: timestamp[ms, tz=UTC]\nCOUNTRY_CODE: string\nURL: string\nPROJECT: string\nFILE: string\nINSTALLER: string\nPYTHON: string\nIMPLEMENTATION: string\nDISTRO: string\nSYSTEM: string\nCPU: string\nOPENSSL_VERSION: string\nSETUPTOOLS_VERSION: string\nRUSTC_VERSION: string\nTLS_PROTOCOL: string\nTLS_CIPHER: string",
+      "sha256": "d623a3400e487bff9616ce87c84638abf4f5fca8c7cbcf1205b3ba7786b9de55"
+    },
+    {
+      "bytes": 146055695,
+      "path": "/home/vikramaditya/PersonalProjects/polars-gpu-test/dataset/pypi_0_7_23.snappy.parquet",
+      "rows": 1610789,
+      "schema": "TIMESTAMP: timestamp[ms, tz=UTC]\nCOUNTRY_CODE: string\nURL: string\nPROJECT: string\nFILE: string\nINSTALLER: string\nPYTHON: string\nIMPLEMENTATION: string\nDISTRO: string\nSYSTEM: string\nCPU: string\nOPENSSL_VERSION: string\nSETUPTOOLS_VERSION: string\nRUSTC_VERSION: string\nTLS_PROTOCOL: string\nTLS_CIPHER: string",
+      "sha256": "b35ddae8b25d89bc8e8803ff66d87d302d020939ec4c44e748bb99bb3d25b7c5"
+    },
+    {
+      "bytes": 147232680,
+      "path": "/home/vikramaditya/PersonalProjects/polars-gpu-test/dataset/pypi_0_7_24.snappy.parquet",
+      "rows": 1585591,
+      "schema": "TIMESTAMP: timestamp[ms, tz=UTC]\nCOUNTRY_CODE: string\nURL: string\nPROJECT: string\nFILE: string\nINSTALLER: string\nPYTHON: string\nIMPLEMENTATION: string\nDISTRO: string\nSYSTEM: string\nCPU: string\nOPENSSL_VERSION: string\nSETUPTOOLS_VERSION: string\nRUSTC_VERSION: string\nTLS_PROTOCOL: string\nTLS_CIPHER: string",
+      "sha256": "7495f29df9b46a9c844c03fd983b3401fee174e0d5bec0cf03ec5f1c0399bd42"
+    },
+    {
+      "bytes": 147482162,
+      "path": "/home/vikramaditya/PersonalProjects/polars-gpu-test/dataset/pypi_0_7_25.snappy.parquet",
+      "rows": 1655418,
+      "schema": "TIMESTAMP: timestamp[ms, tz=UTC]\nCOUNTRY_CODE: string\nURL: string\nPROJECT: string\nFILE: string\nINSTALLER: string\nPYTHON: string\nIMPLEMENTATION: string\nDISTRO: string\nSYSTEM: string\nCPU: string\nOPENSSL_VERSION: string\nSETUPTOOLS_VERSION: string\nRUSTC_VERSION: string\nTLS_PROTOCOL: string\nTLS_CIPHER: string",
+      "sha256": "57efc16cf68d6ae123ecf0dddaa51367e954409a2362c8351276407feae21cc3"
+    },
+    {
+      "bytes": 145785044,
+      "path": "/home/vikramaditya/PersonalProjects/polars-gpu-test/dataset/pypi_0_7_26.snappy.parquet",
+      "rows": 1741855,
+      "schema": "TIMESTAMP: timestamp[ms, tz=UTC]\nCOUNTRY_CODE: string\nURL: string\nPROJECT: string\nFILE: string\nINSTALLER: string\nPYTHON: string\nIMPLEMENTATION: string\nDISTRO: string\nSYSTEM: string\nCPU: string\nOPENSSL_VERSION: string\nSETUPTOOLS_VERSION: string\nRUSTC_VERSION: string\nTLS_PROTOCOL: string\nTLS_CIPHER: string",
+      "sha256": "8f7125d10ec2f1a6257a014dd906952d0ba0d78911a4865c5f909deba48427a6"
+    },
+    {
+      "bytes": 149054197,
+      "path": "/home/vikramaditya/PersonalProjects/polars-gpu-test/dataset/pypi_0_7_27.snappy.parquet",
+      "rows": 1700620,
+      "schema": "TIMESTAMP: timestamp[ms, tz=UTC]\nCOUNTRY_CODE: string\nURL: string\nPROJECT: string\nFILE: string\nINSTALLER: string\nPYTHON: string\nIMPLEMENTATION: string\nDISTRO: string\nSYSTEM: string\nCPU: string\nOPENSSL_VERSION: string\nSETUPTOOLS_VERSION: string\nRUSTC_VERSION: string\nTLS_PROTOCOL: string\nTLS_CIPHER: string",
+      "sha256": "63017f8a6354dd47eb292e70de552d07b2d1f789485b2172145d4452fe51f6fc"
+    },
+    {
+      "bytes": 145463924,
+      "path": "/home/vikramaditya/PersonalProjects/polars-gpu-test/dataset/pypi_0_7_28.snappy.parquet",
+      "rows": 1670095,
+      "schema": "TIMESTAMP: timestamp[ms, tz=UTC]\nCOUNTRY_CODE: string\nURL: string\nPROJECT: string\nFILE: string\nINSTALLER: string\nPYTHON: string\nIMPLEMENTATION: string\nDISTRO: string\nSYSTEM: string\nCPU: string\nOPENSSL_VERSION: string\nSETUPTOOLS_VERSION: string\nRUSTC_VERSION: string\nTLS_PROTOCOL: string\nTLS_CIPHER: string",
+      "sha256": "88bc9730eeb575fa3c568ccca66ad8068d4b11632328e265747dca40f3d4b16f"
+    },
+    {
+      "bytes": 148014394,
+      "path": "/home/vikramaditya/PersonalProjects/polars-gpu-test/dataset/pypi_0_7_29.snappy.parquet",
+      "rows": 1795086,
+      "schema": "TIMESTAMP: timestamp[ms, tz=UTC]\nCOUNTRY_CODE: string\nURL: string\nPROJECT: string\nFILE: string\nINSTALLER: string\nPYTHON: string\nIMPLEMENTATION: string\nDISTRO: string\nSYSTEM: string\nCPU: string\nOPENSSL_VERSION: string\nSETUPTOOLS_VERSION: string\nRUSTC_VERSION: string\nTLS_PROTOCOL: string\nTLS_CIPHER: string",
+      "sha256": "1e75d376c814db35d70c1bebc64d04391200d8321759580506c38a8c1118da97"
+    },
+    {
+      "bytes": 147385542,
+      "path": "/home/vikramaditya/PersonalProjects/polars-gpu-test/dataset/pypi_0_7_30.snappy.parquet",
+      "rows": 1615590,
+      "schema": "TIMESTAMP: timestamp[ms, tz=UTC]\nCOUNTRY_CODE: string\nURL: string\nPROJECT: string\nFILE: string\nINSTALLER: string\nPYTHON: string\nIMPLEMENTATION: string\nDISTRO: string\nSYSTEM: string\nCPU: string\nOPENSSL_VERSION: string\nSETUPTOOLS_VERSION: string\nRUSTC_VERSION: string\nTLS_PROTOCOL: string\nTLS_CIPHER: string",
+      "sha256": "1b9beb5d344140ab06fa06042d85401918f04128152b9f59fcc22589b5c299a5"
+    },
+    {
+      "bytes": 146828157,
+      "path": "/home/vikramaditya/PersonalProjects/polars-gpu-test/dataset/pypi_0_7_31.snappy.parquet",
+      "rows": 1650922,
+      "schema": "TIMESTAMP: timestamp[ms, tz=UTC]\nCOUNTRY_CODE: string\nURL: string\nPROJECT: string\nFILE: string\nINSTALLER: string\nPYTHON: string\nIMPLEMENTATION: string\nDISTRO: string\nSYSTEM: string\nCPU: string\nOPENSSL_VERSION: string\nSETUPTOOLS_VERSION: string\nRUSTC_VERSION: string\nTLS_PROTOCOL: string\nTLS_CIPHER: string",
+      "sha256": "d56e5d1c18e63ab778618ce7bd0426972018c1c3f531ba80e47cd579e2e2d7a0"
+    },
+    {
+      "bytes": 147801165,
+      "path": "/home/vikramaditya/PersonalProjects/polars-gpu-test/dataset/pypi_0_7_32.snappy.parquet",
+      "rows": 1714439,
+      "schema": "TIMESTAMP: timestamp[ms, tz=UTC]\nCOUNTRY_CODE: string\nURL: string\nPROJECT: string\nFILE: string\nINSTALLER: string\nPYTHON: string\nIMPLEMENTATION: string\nDISTRO: string\nSYSTEM: string\nCPU: string\nOPENSSL_VERSION: string\nSETUPTOOLS_VERSION: string\nRUSTC_VERSION: string\nTLS_PROTOCOL: string\nTLS_CIPHER: string",
+      "sha256": "c3b46561c3f4dbb2e4ea6c65caf61d5992b8b8c57b3db4a22f0f3e46d6c9f280"
+    },
+    {
+      "bytes": 148512689,
+      "path": "/home/vikramaditya/PersonalProjects/polars-gpu-test/dataset/pypi_0_7_33.snappy.parquet",
+      "rows": 1678692,
+      "schema": "TIMESTAMP: timestamp[ms, tz=UTC]\nCOUNTRY_CODE: string\nURL: string\nPROJECT: string\nFILE: string\nINSTALLER: string\nPYTHON: string\nIMPLEMENTATION: string\nDISTRO: string\nSYSTEM: string\nCPU: string\nOPENSSL_VERSION: string\nSETUPTOOLS_VERSION: string\nRUSTC_VERSION: string\nTLS_PROTOCOL: string\nTLS_CIPHER: string",
+      "sha256": "56a6caad8c78af6ca8403a2e7404d20bc17fee0e6a0da8a35b4c7d8a09cca2c1"
+    },
+    {
+      "bytes": 145992179,
+      "path": "/home/vikramaditya/PersonalProjects/polars-gpu-test/dataset/pypi_0_7_34.snappy.parquet",
+      "rows": 1692671,
+      "schema": "TIMESTAMP: timestamp[ms, tz=UTC]\nCOUNTRY_CODE: string\nURL: string\nPROJECT: string\nFILE: string\nINSTALLER: string\nPYTHON: string\nIMPLEMENTATION: string\nDISTRO: string\nSYSTEM: string\nCPU: string\nOPENSSL_VERSION: string\nSETUPTOOLS_VERSION: string\nRUSTC_VERSION: string\nTLS_PROTOCOL: string\nTLS_CIPHER: string",
+      "sha256": "deb7e347d0c31de8b01bdd8af5a85b9814305c2d2b71cdd5656be083582dc190"
+    },
+    {
+      "bytes": 145593708,
+      "path": "/home/vikramaditya/PersonalProjects/polars-gpu-test/dataset/pypi_0_7_35.snappy.parquet",
+      "rows": 1668726,
+      "schema": "TIMESTAMP: timestamp[ms, tz=UTC]\nCOUNTRY_CODE: string\nURL: string\nPROJECT: string\nFILE: string\nINSTALLER: string\nPYTHON: string\nIMPLEMENTATION: string\nDISTRO: string\nSYSTEM: string\nCPU: string\nOPENSSL_VERSION: string\nSETUPTOOLS_VERSION: string\nRUSTC_VERSION: string\nTLS_PROTOCOL: string\nTLS_CIPHER: string",
+      "sha256": "b0bd283297364ca0f7d7b8442df8ffcf133c3e9443026b54cc589ce57d42c3f2"
+    },
+    {
+      "bytes": 146170758,
+      "path": "/home/vikramaditya/PersonalProjects/polars-gpu-test/dataset/pypi_0_7_36.snappy.parquet",
+      "rows": 1712392,
+      "schema": "TIMESTAMP: timestamp[ms, tz=UTC]\nCOUNTRY_CODE: string\nURL: string\nPROJECT: string\nFILE: string\nINSTALLER: string\nPYTHON: string\nIMPLEMENTATION: string\nDISTRO: string\nSYSTEM: string\nCPU: string\nOPENSSL_VERSION: string\nSETUPTOOLS_VERSION: string\nRUSTC_VERSION: string\nTLS_PROTOCOL: string\nTLS_CIPHER: string",
+      "sha256": "044bb02316bbdc383f42345ec381ac64e19af947570764ff11fab5905731b44a"
+    },
+    {
+      "bytes": 146797319,
+      "path": "/home/vikramaditya/PersonalProjects/polars-gpu-test/dataset/pypi_0_7_37.snappy.parquet",
+      "rows": 1744896,
+      "schema": "TIMESTAMP: timestamp[ms, tz=UTC]\nCOUNTRY_CODE: string\nURL: string\nPROJECT: string\nFILE: string\nINSTALLER: string\nPYTHON: string\nIMPLEMENTATION: string\nDISTRO: string\nSYSTEM: string\nCPU: string\nOPENSSL_VERSION: string\nSETUPTOOLS_VERSION: string\nRUSTC_VERSION: string\nTLS_PROTOCOL: string\nTLS_CIPHER: string",
+      "sha256": "98a058dfb00c9432bf6a92376083dc27aee07b156f6b5e93b5096891ea7a435b"
+    },
+    {
+      "bytes": 1253300,
+      "path": "/home/vikramaditya/PersonalProjects/polars-gpu-test/dataset/pypi_0_7_38.snappy.parquet",
+      "rows": 28744,
+      "schema": "TIMESTAMP: timestamp[ms, tz=UTC]\nCOUNTRY_CODE: string\nURL: string\nPROJECT: string\nFILE: string\nINSTALLER: string\nPYTHON: string\nIMPLEMENTATION: string\nDISTRO: string\nSYSTEM: string\nCPU: string\nOPENSSL_VERSION: string\nSETUPTOOLS_VERSION: string\nRUSTC_VERSION: string\nTLS_PROTOCOL: string\nTLS_CIPHER: string",
+      "sha256": "42e6e829cb38e8223906258d98bf7f0ffbe7eed604a8bc64fb4af59a67d02181"
+    }
+  ],
+  "locks_sha256": {
+    "legacy.txt": "2ed5f1b25515d67ddae127bd009ff73833e60f36d07cff3b436b80fb9be380b6",
+    "modern.txt": "19551490d4a763723c5463e5da1b6ca19c62798bf7d5e607edf5ae8fce324166"
+  },
+  "protocol": {
+    "affinity": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11
+    ],
+    "cache": "warm local files; relevant files pre-read before every phase",
+    "memory": "Linux ru_maxrss KiB / 1024; per worker through materialization, includes initialization; excludes verifier and VRAM",
+    "persistence": "fresh store per trial; ingestion incl. close; separate worker reopens before query",
+    "repeats": 5,
+    "seed": 42,
+    "threads": 12,
+    "timeout_s": 300,
+    "timing": "query construction through sorted Arrow materialization; excludes imports, export, verification",
+    "warmups": 1
+  },
+  "reference": {
+    "dimension_rows": 150599,
+    "workloads": {
+      "high-cardinality": {
+        "groups": 1133980,
+        "matching_rows": 30385077
+      },
+      "join": {
+        "groups": 3009,
+        "matching_rows": 30385077
+      },
+      "original": {
+        "groups": 463523,
+        "matching_rows": 30385077
+      },
+      "selective": {
+        "groups": 13566,
+        "matching_rows": 454252
+      }
+    }
+  },
+  "reference_reused_from": "/home/vikramaditya/PersonalProjects/polars-gpu-test/results/benchmark-full-20261025",
+  "reference_sha256": {
+    "dimension.parquet": "f40b0643ef0be8bbb62b287bd41873e8a81f5e24ca1df4fbcecd097e458b4e35",
+    "high-cardinality.arrow": "5a67b7b08e6513527dba83d0efcb83a3242821a2040ac098a77f0b374aa00637",
+    "join.arrow": "7e71bcec2815027600d286a5bb53e81e76ba39a8a27a9d1b4fd2f91aab697fa2",
+    "original.arrow": "d68901ea8e8c1845af6e5bbe7ae8d11eea760f71911b08561f2603d2cecfb92d",
+    "selective.arrow": "0116047282a6ef7be208b737d5ee6f335efb33d3985265d108ab13679a775734"
+  },
+  "schema_version": 1,
+  "status": "passed",
+  "workloads": [
+    "original",
+    "selective",
+    "high-cardinality",
+    "join"
+  ]
+}

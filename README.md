@@ -4,6 +4,53 @@ Compare Polars, DuckDB, chDB and pandas on identical PyPI-event workloads, with 
 
 [Polars 2.0 shipped on 6 October 2026](https://pola.rs/posts/release-polars-2/) and [DuckDB 2.0 shipped on 21 October 2026](https://duckdb.org/2026/10/21/announcing-duckdb-200). This comparison includes older versions so an upgrade can be evaluated alongside an engine choice. **GPU performance remains pending.**
 
+## Measured results and engine choices
+
+The complete **25 October 2026** run passed **240 full-result checks**: one warmup and five measured repetitions for each of ten configurations across four workloads. Every original aggregation matched **30,385,077 events and 463,523 groups**. The host was an Intel Core i7-8750H (6 physical cores / 12 logical CPUs), with 30.5 GiB visible RAM, Ubuntu 26.10 and Python 3.12.12. All workers shared the same 12-CPU affinity budget.
+
+[Full results and ranges](benchmarks/evidence/2026-10-25/summary.md) · [Standalone charts](benchmarks/evidence/2026-10-25/charts.html) · [Raw trials](benchmarks/evidence/2026-10-25/trials.csv) · [Manifest and input hashes](benchmarks/evidence/2026-10-25/manifest.json)
+
+Each cell below is **median query seconds / maximum query-worker peak RSS in MiB**, over five measured repetitions. Query time includes sorted Arrow materialization; startup/imports and correctness checks are excluded. These are warm local-file results for these implementations.
+
+| Workload | Polars 2.0 default | Polars 2.0 in-memory | DuckDB 2.0 Parquet | chDB 3.7.2 Parquet | pandas 2.2.2 |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| original | 0.706 / 1272 | 2.440 / 4552 | 0.543 / 539 | 1.534 / 1424 | 8.828 / 1613 |
+| selective | 0.076 / 198 | 0.066 / 212 | 0.083 / 269 | 0.986 / 2104 | 4.919 / 1152 |
+| high-cardinality | 4.055 / 4868 | 3.647 / 10782 | 2.767 / 2779 | 6.346 / 5642 | 25.918 / 2300 |
+| join | 0.936 / 1046 | 1.619 / 2965 | 0.349 / 283 | 1.671 / 1404 | 15.909 / 2324 |
+
+A lower median alone does not establish a speed winner. DuckDB 2.0 and default Polars 2.0 have overlapping timing ranges for `original` (0.489–0.735 vs 0.560–1.049 seconds), `selective` and `high-cardinality`; those speed comparisons are **inconclusive**. For `join`, the ranges are disjoint: DuckDB 2.0 took 0.243–0.394 seconds versus Polars 2.0's 0.824–1.411. These are observations from five samples, not a statistical significance test. [Pairwise comparisons](benchmarks/evidence/2026-10-25/comparisons.json) retain the same rule for every comparable pair.
+
+| Engine | Choose it when | Evidence and tradeoff on this dataset |
+| --- | --- | --- |
+| Polars 2.0 | You want composable Python dataframe transformations and lazy file queries. | The streaming default reduced `original` to 0.706 s and 1,272 MiB maximum RSS, versus 2.440 s and 4,552 MiB for its in-memory control. The high-cardinality mode timings overlap, while the default uses substantially less memory: 4,868 vs 10,782 MiB maximum. |
+| DuckDB 2.0 | SQL over files or an embedded database fits your application. | Its join was faster than Polars in these observations and peaked at 283 MiB. On the original and higher-cardinality aggregations, speed overlaps with default Polars; DuckDB used lower peak RSS. The selective case instead has lower peak RSS in default Polars. |
+| chDB 3.7.2 | Reusing ClickHouse SQL and functions matters to your workflow. | The untuned file baseline has a performance/memory cost relative to DuckDB in these cases. MergeTree can reduce query memory and selective-query time, with separate ingestion costs shown below. This does not characterize a tuned ClickHouse server. |
+| pandas 2.2.2 | Existing pandas behavior and integration justify the measured runtime cost. | All four dataframe baselines were slower than default Polars and DuckDB here. Memory is workload-dependent: its high-cardinality peak of 2,300 MiB was lower than default Polars' 4,868 MiB. Arrow reader predicates and dtype tuning are outside this baseline. |
+
+The interface considerations above are supported by the [Polars lazy API](https://docs.pola.rs/user-guide/lazy/using/), [DuckDB Parquet support](https://duckdb.org/docs/2.0/data/parquet/overview), [chDB overview](https://clickhouse.com/docs/chdb) and [pandas documentation](https://pandas.pydata.org/docs/). The numerical recommendations come from the linked local evidence.
+
+### What the older versions establish
+
+Default Polars 1.8.2 took a median 3.629 s / maximum 3,772 MiB on `original`, and 11.465 s / 16,624 MiB on `high-cardinality`. Polars 2.0's defaults reduced both runtime and peak RSS in those cases, with disjoint observed timing ranges. This comparison includes the change to streaming; it does not isolate a single optimizer improvement. Keep the legacy stack when dependency compatibility requires it, including this repository's pinned legacy GPU verifier.
+
+DuckDB 1.5.6 and 2.0 have overlapping direct-file timing ranges in **all four workloads**, so these data do not establish a direct-file speedup from that upgrade. DuckDB 1.5.6 also used less query-worker peak RSS in each direct-file case. Evaluate the new release's features and your dependency requirements alongside these measurements.
+
+### When persistent storage pays
+
+Ingestion-inclusive one-shot medians exceeded direct Parquet medians for every engine/workload pair. The table separates ingestion from querying; **one-shot includes ingestion, reopen and query**. Each column is summarized independently, so its medians need not add exactly.
+
+| Workload | DuckDB 2.0: ingest / query / one-shot s | chDB MergeTree: ingest / query / one-shot s |
+| --- | ---: | ---: |
+| original | 1.980 / 0.595 / 2.613 | 1.044 / 1.552 / 2.775 |
+| selective | 1.864 / 0.052 / 1.939 | 0.845 / 0.421 / 1.315 |
+| high-cardinality | 9.733 / 2.793 / 12.605 | 5.766 / 4.644 / 10.557 |
+| join | 2.006 / 0.270 / 2.342 | 0.942 / 1.094 / 2.068 |
+
+For example, MergeTree's selective-query range was 0.355–0.537 s, versus 0.855–1.404 s from Parquet, but its ingestion median was 0.845 s. Its one-shot median was 1.315 s, versus 1.013 s for direct files. Budget both phases' memory as well: higher-cardinality MergeTree peaked at **7,559 MiB while ingesting** and **1,801 MiB while querying**.
+
+For repeated equivalent queries, estimate `ingestion + N × (open + query)` from the recorded phases and compare it with direct-file cost. This is a phase-based estimate with fresh connections, not a measured long-lived database workload. Cold storage, remote files, data exceeding RAM, arbitrary joins, tuned layouts and newer pandas releases require their own measurements. **GPU results remain pending supported-hardware verification.**
+
 ## Reproduce the CPU comparison
 
 Run these commands from the repository root. The two environments use the same Python patch version and hash-locked dependencies. They do not replace the original `.venv` or its legacy GPU dependencies.
@@ -52,6 +99,8 @@ Each trial runs in a fresh interpreter with the same CPU affinity and thread bud
 
 Query time includes construction, reads, execution, deterministic sorting and complete Arrow materialization. Engine imports, reference generation, verification, output serialization and reporting are outside that timer. The Arrow conversion cost is included for every engine. Connection opening is recorded separately. Persistent modes bulk-load a fresh store for each trial, close it, then reopen it in a separate query process. Ingestion includes checkpoint/close; `one_shot_s` adds ingestion, reopen and query. Direct-file `one_shot_s` adds open and query.
 
+These results describe the checked implementations rather than each library's performance ceiling. The pandas baseline projects columns with `read_parquet`, then filters and groups with dataframe operations; it does not pass Arrow reader predicates or tune categorical/Arrow-backed dtypes. Its join uses `validate="many_to_one"`. Phase-based one-shot costs exclude interpreter startup and imports, so they are not full CLI wall-clock times.
+
 Peak memory is Linux `ru_maxrss`, captured through materialization before export and verification. It includes initialization of that worker; baseline RSS and initialization high-water mark are recorded separately. It excludes the controller, oracle, verifier, OS file cache and GPU VRAM. Persistent ingestion has its own process peak; **peaks are not added together**. Engine memory policies use their defaults, with effective settings recorded.
 
 Polars 2.0's lazy default is streaming; the explicit in-memory control helps distinguish that execution-mode change from other version changes. The legacy default uses its older CPU engine. See the [Polars 2.0 migration guide](https://docs.pola.rs/releases/upgrade/2/). Upgrade results compare shipped behavior, not a single isolated optimizer change.
@@ -64,17 +113,9 @@ MergeTree uses an explicitly untuned `ORDER BY ()` baseline, with no added index
 
 `summary.json`, `summary.csv`, `summary.md` and `charts.html` are regenerated from raw trials. Timings show median, interquartile range and observed range; memory shows median and maximum. A configuration is eligible only after every requested trial and warmup passes. Failed measurements are excluded from successful distributions, and failed/incomplete configurations are excluded from comparison charts. `comparisons.json` compares configurations within the same workload and storage mode; overlapping timing ranges are labeled **inconclusive**. Disjoint ranges describe these observations, not a statistical significance test.
 
-### Engine-selection guidance
+The [historical correctness report](benchmarks/evidence/2026-10-23-legacy-correctness.json) preserves the original six-stage verification separately. Its shared-process, one-repeat timings establish no fair performance ranking.
 
-All ten configurations passed fixture correctness coverage for all four workloads, including checked warmups, null/empty/Unicode keys, empty selections and unmatched joins. The nine original verifier and notebook regression tests also passed. The full-dataset references independently reproduce 30,385,077 events, 463,523 country/project groups, 13,566 filtered project groups, 1,133,980 country/URL groups, and 3,009 country/bucket groups after the join.
-
-**New performance rankings are pending the complete measured sweep.** An initial full-dataset run was interrupted after six passing warmups and zero measured samples; those warmups establish no performance ranking. Use the historical run below as correctness evidence only: it used a shared process and mixed ingestion with querying.
-
-The [historical correctness report](benchmarks/evidence/2026-10-23-legacy-correctness.json) is retained in the repository so the original counts and verification status can be inspected without the ignored local outputs.
-
-Use the measurements to choose for the actual workload and memory budget, alongside the interface your project needs. Polars exposes composable dataframe expressions; DuckDB supports SQL directly over files and persistent tables; chDB embeds ClickHouse query behavior; pandas integrates with existing pandas workflows. These are capability considerations, supported by the [Polars](https://docs.pola.rs/), [DuckDB](https://duckdb.org/docs/2.0/), [chDB](https://clickhouse.com/docs/chdb) and [pandas](https://pandas.pydata.org/docs/) documentation, rather than performance conclusions from this dataset.
-
-Compare direct-file engines together. For persistent stores, compare both query time and ingestion-inclusive one-shot time. For repeated queries, estimate total cost as `ingestion + N × (open + query)` using the recorded phases; this is an estimate for repeated equivalent queries, not a measured long-lived database workload. It does not establish behavior on remote storage, data exceeding RAM, arbitrary joins, or tuned server deployments.
+With the original development environment and both benchmark environments installed, run `.venv/bin/python -m pytest -q`. The complete suite passed **33 tests**, including all ten configurations, checked warmups, null/empty/Unicode keys, empty selections, unmatched joins, version checks, process isolation, timing boundaries, timeout cleanup, reference-cache validation and the original notebook/downloader regressions. Benchmark integration cases are skipped when their dedicated environments are absent.
 
 ## Original notebook and GPU verification
 
@@ -82,7 +123,7 @@ Download public PyPI events, aggregate downloads by `COUNTRY_CODE` and `PROJECT`
 
 Each complete result is checked against independent, streaming Python `Counter` counts. Null keys are retained and ties are normalized before comparison. Persistent stores are rebuilt in temporary directories and reopened before querying.
 
-## Setup
+### Setup
 
 Use Python 3.11 or 3.12. The notebook's RAPIDS 24.8.3 wheel is no longer published on NVIDIA's index. The nearest published release, 24.10.1, requires Polars >=1.8,<1.9; the project therefore pins Polars 1.8.2 and RAPIDS 24.10.1.
 
@@ -102,7 +143,7 @@ uv pip install --python .venv/bin/python --extra-index-url https://pypi.nvidia.c
 
 The GTX 1050 Ti is Pascal (6.1) and cannot run this GPU backend. See the [Polars GPU documentation](https://docs.pola.rs/user-guide/gpu-support/) and use the [RAPIDS legacy installation guidance](https://docs.rapids.ai/install/) for the pinned stack.
 
-## Run against real data
+### Run against real data
 
 ```sh
 # One public shard, about 142 MiB. Omit --limit to download all 19 shards.
@@ -120,7 +161,7 @@ GPU execution uses `pl.GPUEngine(raise_on_fail=True)` to prevent silent CPU fall
 
 Downloads use bounded concurrency, propagate HTTP errors, clean up partial files, and atomically replace completed transfers. The downloader keeps its original current-directory default; the examples explicitly select `dataset/`. Parquet parsing remains the responsibility of the pipeline. A failed replacement preserves an existing destination. Use `--url URL` (repeatable), `--output-dir PATH`, and `--concurrency N` for custom sources.
 
-## Notebook
+### Notebook
 
 Open `polars-gpu-test.ipynb` using this virtual environment's kernel and run all cells. It calls the same verifier and generates charts from current measurements. If the default dataset directory is empty, it downloads one shard automatically.
 
@@ -133,7 +174,7 @@ Optional environment variables:
 | `PYPI_GPU` | `auto` | `auto`, `required`, or `off` |
 | `PYPI_REPEATS` | `1` | Runs per engine |
 
-## Outputs and verification
+### Outputs and verification
 
 `results/verification.json` records versions, inputs, exact row/group counts, per-engine results, and GPU skip/failure reasons. It returns overall `passed` only when all required stages pass; always check `gpu_verified` separately when using `auto`.
 
@@ -149,7 +190,7 @@ For chDB, `ORDER BY ()` remains appropriate to this full-scan comparison: there 
 
 Tests exercise multiple Parquet shards, duplicate and tied counts, null/empty/Unicode keys, all six CPU stages, persistence after reopening, chart averages, missing inputs, strict GPU configuration, required-GPU failures, and downloader path contracts and HTTP/error atomicity using a local HTTP server. The GPU configuration test simulates execution and does not establish hardware support; only a successful real `--gpu required` run does.
 
-## Verified run (23 October 2026)
+### Verified run (23 October 2026)
 
 The complete notebook executed in a fresh Python 3.12 kernel against all 19 default shards (2,648,789,261 bytes). All six CPU stages matched the independent reference: **30,385,077 rows and 463,523 groups**. Runtime versions: Polars 1.8.2, DuckDB 1.5.6, chDB 3.7.2, pandas 2.2.2, PyArrow 16.1.0. The integration suite passed **9 tests** and the installed dependencies passed `uv pip check`.
 

@@ -1,0 +1,674 @@
+[
+  {
+    "workload": "high-cardinality",
+    "left": "chdb-mergetree",
+    "right": "duckdb-1.5-persistent",
+    "conclusion": "observed ranges disjoint",
+    "faster": "duckdb-1.5-persistent"
+  },
+  {
+    "workload": "high-cardinality",
+    "left": "chdb-mergetree",
+    "right": "duckdb-2.0-persistent",
+    "conclusion": "observed ranges disjoint",
+    "faster": "duckdb-2.0-persistent"
+  },
+  {
+    "workload": "high-cardinality",
+    "left": "chdb-parquet",
+    "right": "duckdb-1.5-parquet",
+    "conclusion": "inconclusive: ranges overlap",
+    "faster": null
+  },
+  {
+    "workload": "high-cardinality",
+    "left": "chdb-parquet",
+    "right": "duckdb-2.0-parquet",
+    "conclusion": "observed ranges disjoint",
+    "faster": "duckdb-2.0-parquet"
+  },
+  {
+    "workload": "high-cardinality",
+    "left": "chdb-parquet",
+    "right": "pandas",
+    "conclusion": "observed ranges disjoint",
+    "faster": "chdb-parquet"
+  },
+  {
+    "workload": "high-cardinality",
+    "left": "chdb-parquet",
+    "right": "polars-1.8-default",
+    "conclusion": "observed ranges disjoint",
+    "faster": "chdb-parquet"
+  },
+  {
+    "workload": "high-cardinality",
+    "left": "chdb-parquet",
+    "right": "polars-2.0-default",
+    "conclusion": "inconclusive: ranges overlap",
+    "faster": null
+  },
+  {
+    "workload": "high-cardinality",
+    "left": "chdb-parquet",
+    "right": "polars-2.0-in-memory",
+    "conclusion": "inconclusive: ranges overlap",
+    "faster": null
+  },
+  {
+    "workload": "high-cardinality",
+    "left": "duckdb-1.5-parquet",
+    "right": "duckdb-2.0-parquet",
+    "conclusion": "inconclusive: ranges overlap",
+    "faster": null
+  },
+  {
+    "workload": "high-cardinality",
+    "left": "duckdb-1.5-parquet",
+    "right": "pandas",
+    "conclusion": "observed ranges disjoint",
+    "faster": "duckdb-1.5-parquet"
+  },
+  {
+    "workload": "high-cardinality",
+    "left": "duckdb-1.5-parquet",
+    "right": "polars-1.8-default",
+    "conclusion": "observed ranges disjoint",
+    "faster": "duckdb-1.5-parquet"
+  },
+  {
+    "workload": "high-cardinality",
+    "left": "duckdb-1.5-parquet",
+    "right": "polars-2.0-default",
+    "conclusion": "inconclusive: ranges overlap",
+    "faster": null
+  },
+  {
+    "workload": "high-cardinality",
+    "left": "duckdb-1.5-parquet",
+    "right": "polars-2.0-in-memory",
+    "conclusion": "inconclusive: ranges overlap",
+    "faster": null
+  },
+  {
+    "workload": "high-cardinality",
+    "left": "duckdb-1.5-persistent",
+    "right": "duckdb-2.0-persistent",
+    "conclusion": "inconclusive: ranges overlap",
+    "faster": null
+  },
+  {
+    "workload": "high-cardinality",
+    "left": "duckdb-2.0-parquet",
+    "right": "pandas",
+    "conclusion": "observed ranges disjoint",
+    "faster": "duckdb-2.0-parquet"
+  },
+  {
+    "workload": "high-cardinality",
+    "left": "duckdb-2.0-parquet",
+    "right": "polars-1.8-default",
+    "conclusion": "observed ranges disjoint",
+    "faster": "duckdb-2.0-parquet"
+  },
+  {
+    "workload": "high-cardinality",
+    "left": "duckdb-2.0-parquet",
+    "right": "polars-2.0-default",
+    "conclusion": "inconclusive: ranges overlap",
+    "faster": null
+  },
+  {
+    "workload": "high-cardinality",
+    "left": "duckdb-2.0-parquet",
+    "right": "polars-2.0-in-memory",
+    "conclusion": "inconclusive: ranges overlap",
+    "faster": null
+  },
+  {
+    "workload": "high-cardinality",
+    "left": "pandas",
+    "right": "polars-1.8-default",
+    "conclusion": "observed ranges disjoint",
+    "faster": "polars-1.8-default"
+  },
+  {
+    "workload": "high-cardinality",
+    "left": "pandas",
+    "right": "polars-2.0-default",
+    "conclusion": "observed ranges disjoint",
+    "faster": "polars-2.0-default"
+  },
+  {
+    "workload": "high-cardinality",
+    "left": "pandas",
+    "right": "polars-2.0-in-memory",
+    "conclusion": "observed ranges disjoint",
+    "faster": "polars-2.0-in-memory"
+  },
+  {
+    "workload": "high-cardinality",
+    "left": "polars-1.8-default",
+    "right": "polars-2.0-default",
+    "conclusion": "observed ranges disjoint",
+    "faster": "polars-2.0-default"
+  },
+  {
+    "workload": "high-cardinality",
+    "left": "polars-1.8-default",
+    "right": "polars-2.0-in-memory",
+    "conclusion": "observed ranges disjoint",
+    "faster": "polars-2.0-in-memory"
+  },
+  {
+    "workload": "high-cardinality",
+    "left": "polars-2.0-default",
+    "right": "polars-2.0-in-memory",
+    "conclusion": "inconclusive: ranges overlap",
+    "faster": null
+  },
+  {
+    "workload": "join",
+    "left": "chdb-mergetree",
+    "right": "duckdb-1.5-persistent",
+    "conclusion": "observed ranges disjoint",
+    "faster": "duckdb-1.5-persistent"
+  },
+  {
+    "workload": "join",
+    "left": "chdb-mergetree",
+    "right": "duckdb-2.0-persistent",
+    "conclusion": "observed ranges disjoint",
+    "faster": "duckdb-2.0-persistent"
+  },
+  {
+    "workload": "join",
+    "left": "chdb-parquet",
+    "right": "duckdb-1.5-parquet",
+    "conclusion": "observed ranges disjoint",
+    "faster": "duckdb-1.5-parquet"
+  },
+  {
+    "workload": "join",
+    "left": "chdb-parquet",
+    "right": "duckdb-2.0-parquet",
+    "conclusion": "observed ranges disjoint",
+    "faster": "duckdb-2.0-parquet"
+  },
+  {
+    "workload": "join",
+    "left": "chdb-parquet",
+    "right": "pandas",
+    "conclusion": "observed ranges disjoint",
+    "faster": "chdb-parquet"
+  },
+  {
+    "workload": "join",
+    "left": "chdb-parquet",
+    "right": "polars-1.8-default",
+    "conclusion": "observed ranges disjoint",
+    "faster": "chdb-parquet"
+  },
+  {
+    "workload": "join",
+    "left": "chdb-parquet",
+    "right": "polars-2.0-default",
+    "conclusion": "inconclusive: ranges overlap",
+    "faster": null
+  },
+  {
+    "workload": "join",
+    "left": "chdb-parquet",
+    "right": "polars-2.0-in-memory",
+    "conclusion": "inconclusive: ranges overlap",
+    "faster": null
+  },
+  {
+    "workload": "join",
+    "left": "duckdb-1.5-parquet",
+    "right": "duckdb-2.0-parquet",
+    "conclusion": "inconclusive: ranges overlap",
+    "faster": null
+  },
+  {
+    "workload": "join",
+    "left": "duckdb-1.5-parquet",
+    "right": "pandas",
+    "conclusion": "observed ranges disjoint",
+    "faster": "duckdb-1.5-parquet"
+  },
+  {
+    "workload": "join",
+    "left": "duckdb-1.5-parquet",
+    "right": "polars-1.8-default",
+    "conclusion": "observed ranges disjoint",
+    "faster": "duckdb-1.5-parquet"
+  },
+  {
+    "workload": "join",
+    "left": "duckdb-1.5-parquet",
+    "right": "polars-2.0-default",
+    "conclusion": "observed ranges disjoint",
+    "faster": "duckdb-1.5-parquet"
+  },
+  {
+    "workload": "join",
+    "left": "duckdb-1.5-parquet",
+    "right": "polars-2.0-in-memory",
+    "conclusion": "observed ranges disjoint",
+    "faster": "duckdb-1.5-parquet"
+  },
+  {
+    "workload": "join",
+    "left": "duckdb-1.5-persistent",
+    "right": "duckdb-2.0-persistent",
+    "conclusion": "inconclusive: ranges overlap",
+    "faster": null
+  },
+  {
+    "workload": "join",
+    "left": "duckdb-2.0-parquet",
+    "right": "pandas",
+    "conclusion": "observed ranges disjoint",
+    "faster": "duckdb-2.0-parquet"
+  },
+  {
+    "workload": "join",
+    "left": "duckdb-2.0-parquet",
+    "right": "polars-1.8-default",
+    "conclusion": "observed ranges disjoint",
+    "faster": "duckdb-2.0-parquet"
+  },
+  {
+    "workload": "join",
+    "left": "duckdb-2.0-parquet",
+    "right": "polars-2.0-default",
+    "conclusion": "observed ranges disjoint",
+    "faster": "duckdb-2.0-parquet"
+  },
+  {
+    "workload": "join",
+    "left": "duckdb-2.0-parquet",
+    "right": "polars-2.0-in-memory",
+    "conclusion": "observed ranges disjoint",
+    "faster": "duckdb-2.0-parquet"
+  },
+  {
+    "workload": "join",
+    "left": "pandas",
+    "right": "polars-1.8-default",
+    "conclusion": "observed ranges disjoint",
+    "faster": "polars-1.8-default"
+  },
+  {
+    "workload": "join",
+    "left": "pandas",
+    "right": "polars-2.0-default",
+    "conclusion": "observed ranges disjoint",
+    "faster": "polars-2.0-default"
+  },
+  {
+    "workload": "join",
+    "left": "pandas",
+    "right": "polars-2.0-in-memory",
+    "conclusion": "observed ranges disjoint",
+    "faster": "polars-2.0-in-memory"
+  },
+  {
+    "workload": "join",
+    "left": "polars-1.8-default",
+    "right": "polars-2.0-default",
+    "conclusion": "observed ranges disjoint",
+    "faster": "polars-2.0-default"
+  },
+  {
+    "workload": "join",
+    "left": "polars-1.8-default",
+    "right": "polars-2.0-in-memory",
+    "conclusion": "inconclusive: ranges overlap",
+    "faster": null
+  },
+  {
+    "workload": "join",
+    "left": "polars-2.0-default",
+    "right": "polars-2.0-in-memory",
+    "conclusion": "inconclusive: ranges overlap",
+    "faster": null
+  },
+  {
+    "workload": "original",
+    "left": "chdb-mergetree",
+    "right": "duckdb-1.5-persistent",
+    "conclusion": "observed ranges disjoint",
+    "faster": "duckdb-1.5-persistent"
+  },
+  {
+    "workload": "original",
+    "left": "chdb-mergetree",
+    "right": "duckdb-2.0-persistent",
+    "conclusion": "observed ranges disjoint",
+    "faster": "duckdb-2.0-persistent"
+  },
+  {
+    "workload": "original",
+    "left": "chdb-parquet",
+    "right": "duckdb-1.5-parquet",
+    "conclusion": "observed ranges disjoint",
+    "faster": "duckdb-1.5-parquet"
+  },
+  {
+    "workload": "original",
+    "left": "chdb-parquet",
+    "right": "duckdb-2.0-parquet",
+    "conclusion": "observed ranges disjoint",
+    "faster": "duckdb-2.0-parquet"
+  },
+  {
+    "workload": "original",
+    "left": "chdb-parquet",
+    "right": "pandas",
+    "conclusion": "observed ranges disjoint",
+    "faster": "chdb-parquet"
+  },
+  {
+    "workload": "original",
+    "left": "chdb-parquet",
+    "right": "polars-1.8-default",
+    "conclusion": "observed ranges disjoint",
+    "faster": "chdb-parquet"
+  },
+  {
+    "workload": "original",
+    "left": "chdb-parquet",
+    "right": "polars-2.0-default",
+    "conclusion": "observed ranges disjoint",
+    "faster": "polars-2.0-default"
+  },
+  {
+    "workload": "original",
+    "left": "chdb-parquet",
+    "right": "polars-2.0-in-memory",
+    "conclusion": "inconclusive: ranges overlap",
+    "faster": null
+  },
+  {
+    "workload": "original",
+    "left": "duckdb-1.5-parquet",
+    "right": "duckdb-2.0-parquet",
+    "conclusion": "inconclusive: ranges overlap",
+    "faster": null
+  },
+  {
+    "workload": "original",
+    "left": "duckdb-1.5-parquet",
+    "right": "pandas",
+    "conclusion": "observed ranges disjoint",
+    "faster": "duckdb-1.5-parquet"
+  },
+  {
+    "workload": "original",
+    "left": "duckdb-1.5-parquet",
+    "right": "polars-1.8-default",
+    "conclusion": "observed ranges disjoint",
+    "faster": "duckdb-1.5-parquet"
+  },
+  {
+    "workload": "original",
+    "left": "duckdb-1.5-parquet",
+    "right": "polars-2.0-default",
+    "conclusion": "inconclusive: ranges overlap",
+    "faster": null
+  },
+  {
+    "workload": "original",
+    "left": "duckdb-1.5-parquet",
+    "right": "polars-2.0-in-memory",
+    "conclusion": "observed ranges disjoint",
+    "faster": "duckdb-1.5-parquet"
+  },
+  {
+    "workload": "original",
+    "left": "duckdb-1.5-persistent",
+    "right": "duckdb-2.0-persistent",
+    "conclusion": "inconclusive: ranges overlap",
+    "faster": null
+  },
+  {
+    "workload": "original",
+    "left": "duckdb-2.0-parquet",
+    "right": "pandas",
+    "conclusion": "observed ranges disjoint",
+    "faster": "duckdb-2.0-parquet"
+  },
+  {
+    "workload": "original",
+    "left": "duckdb-2.0-parquet",
+    "right": "polars-1.8-default",
+    "conclusion": "observed ranges disjoint",
+    "faster": "duckdb-2.0-parquet"
+  },
+  {
+    "workload": "original",
+    "left": "duckdb-2.0-parquet",
+    "right": "polars-2.0-default",
+    "conclusion": "inconclusive: ranges overlap",
+    "faster": null
+  },
+  {
+    "workload": "original",
+    "left": "duckdb-2.0-parquet",
+    "right": "polars-2.0-in-memory",
+    "conclusion": "observed ranges disjoint",
+    "faster": "duckdb-2.0-parquet"
+  },
+  {
+    "workload": "original",
+    "left": "pandas",
+    "right": "polars-1.8-default",
+    "conclusion": "observed ranges disjoint",
+    "faster": "polars-1.8-default"
+  },
+  {
+    "workload": "original",
+    "left": "pandas",
+    "right": "polars-2.0-default",
+    "conclusion": "observed ranges disjoint",
+    "faster": "polars-2.0-default"
+  },
+  {
+    "workload": "original",
+    "left": "pandas",
+    "right": "polars-2.0-in-memory",
+    "conclusion": "observed ranges disjoint",
+    "faster": "polars-2.0-in-memory"
+  },
+  {
+    "workload": "original",
+    "left": "polars-1.8-default",
+    "right": "polars-2.0-default",
+    "conclusion": "observed ranges disjoint",
+    "faster": "polars-2.0-default"
+  },
+  {
+    "workload": "original",
+    "left": "polars-1.8-default",
+    "right": "polars-2.0-in-memory",
+    "conclusion": "inconclusive: ranges overlap",
+    "faster": null
+  },
+  {
+    "workload": "original",
+    "left": "polars-2.0-default",
+    "right": "polars-2.0-in-memory",
+    "conclusion": "observed ranges disjoint",
+    "faster": "polars-2.0-default"
+  },
+  {
+    "workload": "selective",
+    "left": "chdb-mergetree",
+    "right": "duckdb-1.5-persistent",
+    "conclusion": "observed ranges disjoint",
+    "faster": "duckdb-1.5-persistent"
+  },
+  {
+    "workload": "selective",
+    "left": "chdb-mergetree",
+    "right": "duckdb-2.0-persistent",
+    "conclusion": "observed ranges disjoint",
+    "faster": "duckdb-2.0-persistent"
+  },
+  {
+    "workload": "selective",
+    "left": "chdb-parquet",
+    "right": "duckdb-1.5-parquet",
+    "conclusion": "observed ranges disjoint",
+    "faster": "duckdb-1.5-parquet"
+  },
+  {
+    "workload": "selective",
+    "left": "chdb-parquet",
+    "right": "duckdb-2.0-parquet",
+    "conclusion": "observed ranges disjoint",
+    "faster": "duckdb-2.0-parquet"
+  },
+  {
+    "workload": "selective",
+    "left": "chdb-parquet",
+    "right": "pandas",
+    "conclusion": "observed ranges disjoint",
+    "faster": "chdb-parquet"
+  },
+  {
+    "workload": "selective",
+    "left": "chdb-parquet",
+    "right": "polars-1.8-default",
+    "conclusion": "observed ranges disjoint",
+    "faster": "polars-1.8-default"
+  },
+  {
+    "workload": "selective",
+    "left": "chdb-parquet",
+    "right": "polars-2.0-default",
+    "conclusion": "observed ranges disjoint",
+    "faster": "polars-2.0-default"
+  },
+  {
+    "workload": "selective",
+    "left": "chdb-parquet",
+    "right": "polars-2.0-in-memory",
+    "conclusion": "observed ranges disjoint",
+    "faster": "polars-2.0-in-memory"
+  },
+  {
+    "workload": "selective",
+    "left": "duckdb-1.5-parquet",
+    "right": "duckdb-2.0-parquet",
+    "conclusion": "inconclusive: ranges overlap",
+    "faster": null
+  },
+  {
+    "workload": "selective",
+    "left": "duckdb-1.5-parquet",
+    "right": "pandas",
+    "conclusion": "observed ranges disjoint",
+    "faster": "duckdb-1.5-parquet"
+  },
+  {
+    "workload": "selective",
+    "left": "duckdb-1.5-parquet",
+    "right": "polars-1.8-default",
+    "conclusion": "observed ranges disjoint",
+    "faster": "duckdb-1.5-parquet"
+  },
+  {
+    "workload": "selective",
+    "left": "duckdb-1.5-parquet",
+    "right": "polars-2.0-default",
+    "conclusion": "inconclusive: ranges overlap",
+    "faster": null
+  },
+  {
+    "workload": "selective",
+    "left": "duckdb-1.5-parquet",
+    "right": "polars-2.0-in-memory",
+    "conclusion": "inconclusive: ranges overlap",
+    "faster": null
+  },
+  {
+    "workload": "selective",
+    "left": "duckdb-1.5-persistent",
+    "right": "duckdb-2.0-persistent",
+    "conclusion": "inconclusive: ranges overlap",
+    "faster": null
+  },
+  {
+    "workload": "selective",
+    "left": "duckdb-2.0-parquet",
+    "right": "pandas",
+    "conclusion": "observed ranges disjoint",
+    "faster": "duckdb-2.0-parquet"
+  },
+  {
+    "workload": "selective",
+    "left": "duckdb-2.0-parquet",
+    "right": "polars-1.8-default",
+    "conclusion": "observed ranges disjoint",
+    "faster": "duckdb-2.0-parquet"
+  },
+  {
+    "workload": "selective",
+    "left": "duckdb-2.0-parquet",
+    "right": "polars-2.0-default",
+    "conclusion": "inconclusive: ranges overlap",
+    "faster": null
+  },
+  {
+    "workload": "selective",
+    "left": "duckdb-2.0-parquet",
+    "right": "polars-2.0-in-memory",
+    "conclusion": "inconclusive: ranges overlap",
+    "faster": null
+  },
+  {
+    "workload": "selective",
+    "left": "pandas",
+    "right": "polars-1.8-default",
+    "conclusion": "observed ranges disjoint",
+    "faster": "polars-1.8-default"
+  },
+  {
+    "workload": "selective",
+    "left": "pandas",
+    "right": "polars-2.0-default",
+    "conclusion": "observed ranges disjoint",
+    "faster": "polars-2.0-default"
+  },
+  {
+    "workload": "selective",
+    "left": "pandas",
+    "right": "polars-2.0-in-memory",
+    "conclusion": "observed ranges disjoint",
+    "faster": "polars-2.0-in-memory"
+  },
+  {
+    "workload": "selective",
+    "left": "polars-1.8-default",
+    "right": "polars-2.0-default",
+    "conclusion": "observed ranges disjoint",
+    "faster": "polars-2.0-default"
+  },
+  {
+    "workload": "selective",
+    "left": "polars-1.8-default",
+    "right": "polars-2.0-in-memory",
+    "conclusion": "observed ranges disjoint",
+    "faster": "polars-2.0-in-memory"
+  },
+  {
+    "workload": "selective",
+    "left": "polars-2.0-default",
+    "right": "polars-2.0-in-memory",
+    "conclusion": "inconclusive: ranges overlap",
+    "faster": null
+  }
+]
