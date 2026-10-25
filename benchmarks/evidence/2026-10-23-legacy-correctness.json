@@ -1,0 +1,93 @@
+{
+  "created_at": "2026-10-23T22:11:28.504681+00:00",
+  "status": "passed",
+  "gpu_verified": false,
+  "files": [
+    "/home/vikramaditya/PersonalProjects/polars-gpu-test/dataset/pypi_0_7_20.snappy.parquet",
+    "/home/vikramaditya/PersonalProjects/polars-gpu-test/dataset/pypi_0_7_21.snappy.parquet",
+    "/home/vikramaditya/PersonalProjects/polars-gpu-test/dataset/pypi_0_7_22.snappy.parquet",
+    "/home/vikramaditya/PersonalProjects/polars-gpu-test/dataset/pypi_0_7_23.snappy.parquet",
+    "/home/vikramaditya/PersonalProjects/polars-gpu-test/dataset/pypi_0_7_24.snappy.parquet",
+    "/home/vikramaditya/PersonalProjects/polars-gpu-test/dataset/pypi_0_7_25.snappy.parquet",
+    "/home/vikramaditya/PersonalProjects/polars-gpu-test/dataset/pypi_0_7_26.snappy.parquet",
+    "/home/vikramaditya/PersonalProjects/polars-gpu-test/dataset/pypi_0_7_27.snappy.parquet",
+    "/home/vikramaditya/PersonalProjects/polars-gpu-test/dataset/pypi_0_7_28.snappy.parquet",
+    "/home/vikramaditya/PersonalProjects/polars-gpu-test/dataset/pypi_0_7_29.snappy.parquet",
+    "/home/vikramaditya/PersonalProjects/polars-gpu-test/dataset/pypi_0_7_30.snappy.parquet",
+    "/home/vikramaditya/PersonalProjects/polars-gpu-test/dataset/pypi_0_7_31.snappy.parquet",
+    "/home/vikramaditya/PersonalProjects/polars-gpu-test/dataset/pypi_0_7_32.snappy.parquet",
+    "/home/vikramaditya/PersonalProjects/polars-gpu-test/dataset/pypi_0_7_33.snappy.parquet",
+    "/home/vikramaditya/PersonalProjects/polars-gpu-test/dataset/pypi_0_7_34.snappy.parquet",
+    "/home/vikramaditya/PersonalProjects/polars-gpu-test/dataset/pypi_0_7_35.snappy.parquet",
+    "/home/vikramaditya/PersonalProjects/polars-gpu-test/dataset/pypi_0_7_36.snappy.parquet",
+    "/home/vikramaditya/PersonalProjects/polars-gpu-test/dataset/pypi_0_7_37.snappy.parquet",
+    "/home/vikramaditya/PersonalProjects/polars-gpu-test/dataset/pypi_0_7_38.snappy.parquet"
+  ],
+  "input_rows": 30385077,
+  "groups": 463523,
+  "repeats": 1,
+  "measurements": [
+    {
+      "Technology": "Polars CPU",
+      "Repeat": 1,
+      "Status": "passed",
+      "Time per loop (s)": 4.4437862710001355,
+      "Peak Memory (MiB)": 4200.671875,
+      "Increment (MiB)": 3527.5625
+    },
+    {
+      "Technology": "Polars GPU",
+      "Status": "skipped",
+      "Reason": "GPU compute capability 6.1 is unsupported; the Polars GPU engine requires Volta or newer (7.0+)"
+    },
+    {
+      "Technology": "DuckDB In-Memory",
+      "Repeat": 1,
+      "Status": "passed",
+      "Time per loop (s)": 0.9231344100007846,
+      "Peak Memory (MiB)": 1334.3828125,
+      "Increment (MiB)": 382.8828125
+    },
+    {
+      "Technology": "DuckDB Persistent",
+      "Repeat": 1,
+      "Status": "passed",
+      "Time per loop (s)": 4.099717331999273,
+      "Peak Memory (MiB)": 1402.72265625,
+      "Increment (MiB)": 427.33203125
+    },
+    {
+      "Technology": "chDB In-Memory",
+      "Repeat": 1,
+      "Status": "passed",
+      "Time per loop (s)": 2.074280548000388,
+      "Peak Memory (MiB)": 2172.69921875,
+      "Increment (MiB)": 1145.56640625
+    },
+    {
+      "Technology": "chDB MergeTree",
+      "Repeat": 1,
+      "Status": "passed",
+      "Time per loop (s)": 4.853742622999562,
+      "Peak Memory (MiB)": 2554.18359375,
+      "Increment (MiB)": 420.234375
+    },
+    {
+      "Technology": "Pandas",
+      "Repeat": 1,
+      "Status": "passed",
+      "Time per loop (s)": 16.333295145999728,
+      "Peak Memory (MiB)": 3466.40625,
+      "Increment (MiB)": 1650.6484375
+    }
+  ],
+  "failures": [],
+  "versions": {
+    "polars": "1.8.2",
+    "duckdb": "1.5.6",
+    "chdb": "3.7.2",
+    "pandas": "2.2.2",
+    "pyarrow": "16.1.0"
+  },
+  "measurement_notes": "Process RSS includes earlier stages and excludes GPU VRAM. Persistent timings include ingestion and reopen. Functional checks, not an isolated performance benchmark."
+}

@@ -1,0 +1,7 @@
+polars==1.8.2
+duckdb==1.5.6
+chdb==3.7.2
+pandas==2.2.2
+pyarrow==16.1.0
+numpy==1.26.4
+psutil==7.2.2
